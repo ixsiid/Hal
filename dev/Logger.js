@@ -6,7 +6,7 @@ module.exports = function (tag) {
     const body = file.getBody();
 
     const levels = 'newidv';
-    this.level = 3;
+    this.level = 4;
 
     const put = (level, object) => {
         if (self.level < levels.indexOf(level)) return;

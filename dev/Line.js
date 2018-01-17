@@ -1,12 +1,12 @@
+const Logger = require('./Logger');
+
 module.exports = function () {
-    const LOGGER  = require('./Logger');
+    const log  = new Logger('LINE');
     const secret = require('../secret/Line');
     
     const ACCESS_TOKEN = secret.access_token;
     const OWNER = secret.owner;
 
-
-    const log = new LOGGER('LINE');
     log.v('Create Line Object');
     
     const self = this;
