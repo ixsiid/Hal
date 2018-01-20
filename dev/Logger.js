@@ -1,3 +1,6 @@
+const Date = require('date-with-offset');
+const zone = require('../secret/Locale').timezoneOffset;
+
 module.exports = function (tag) {
     const self = this;
     const fileId = require('../secret/Google.js').log;
@@ -24,7 +27,7 @@ module.exports = function (tag) {
             });
             return [typeof object === 'string' ? object : JSON.stringify(object)];
         })();
-        const datetime = JSON.stringify(new Date()).substring(1, 20);
+        const datetime = JSON.stringify(new Date(zone)).substring(1, 20);
 
         const row = sheet.getLastRow() + 1;
         sheet.getRange(row, 1, 1, 2 + text.length).setValues([

@@ -1,3 +1,6 @@
+const Date = require('date-with-offset');
+const zone = require('../secret/Locale').timezoneOffset;
+
 module.exports = function (tag) {
     const self = this;
     const fileId = require('../secret/Google.js').log2;
@@ -12,7 +15,7 @@ module.exports = function (tag) {
         if (self.level < levels.indexOf(level)) return;
 
         const text = typeof object === 'string' ? object : JSON.stringify(object);
-        const datetime = JSON.stringify(new Date()).substring(1, 20);
+        const datetime = JSON.stringify(new Date(zone)).substring(1, 20);
         body.appendParagraph('[' + datetime + '] (' + tag + ') ' + level.toUpperCase() + ': ' + text);
     };
 

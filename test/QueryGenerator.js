@@ -1,3 +1,6 @@
+const Date = require('date-with-offset');
+const zone = require('../secret/Locale').timezoneOffset;
+
 const GET = function (queryString) {
     if (queryString[0] === '?') queryString = queryString.substring(1);
     const parameter = {};
@@ -47,7 +50,7 @@ const LINE = function (message) {
                 userId: OWNER,
                 type: 'user',
             },
-            timestamp: new Date().getTime(),
+            timestamp: new Date(zone).getTime(),
             message: {
                 type: 'text',
                 text: message,

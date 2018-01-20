@@ -43,49 +43,35 @@ global.doGet = function (query) {
         .setMimeType(ContentService.MimeType.JSON);
 };
 
-const GetOffsetDay = require('./Parser/GetOffsetDay');
-const Weather = require('./Weather');
+const Runner = require('./Runner');
+
 global.doPost = function (request) {
     const log = global.log;
     log.v('doPost');
     log.v(request);
 
     const contents = JSON.parse(request.postData.contents);
-    const line = new Line();
-    const messages = line.parse(contents);
+    const runner = Runner.map(x => new x(contents)).find(x => x.match());
 
-    if (messages) {
-        // process at line message.
-        log.v(messages);
-        messages.map(m => {
-            log.v(m);
-            const offsetDay = GetOffsetDay(m.message);
-            log.v(JSON.stringify(offsetDay));
-            if (offsetDay.length > 0) {
-                const w = new Weather();
-                const message = offsetDay.map(d => {
-                    log.v(d + '日後の天気を返答');
-                    const target = new Date();
-                    target.setDate(target.getDate() + d);
-                    return [JSON.stringify(target).substring(1, 11) + 'の天気']
-                        .concat(
-                        w.getIncludeGroup('MTB', d).map(x => `${x.city}:${x.weather.short}`)
-                        ).join('\n');
-                }).join('\n\n');
-
-                log.v(`返答内容: ${message}`);
-                line.send(message, m.token);
-            }
-        });
-
-        return ContentService
-            .createTextOutput(JSON.stringify({ content: 'post ok' }))
-            .setMimeType(ContentService.MimeType.JSON);
-    }
+    log.v(runner ? runner.toString() : 'no runnner');
 
     return ContentService
-        .createTextOutput(JSON.stringify('Can\'nt proceed'))
+        .createTextOutput(JSON.stringify(runner ? runner.run() : { content: 'no runner' }))
         .setMimeType(ContentService.MimeType.JSON);
+};
+
+global.AnyHours = function () {
+    const Date = require('date-with-offset');
+    const zone = require('../secret/Locale').timezoneOffset;
+
+    const log = new Logger('HOURS');
+    const date = new Date(zone);
+    const time = Math.floor(date.getHours() + date.getMinutes() / 60 + 0.3);
+    log.v(`Date: [${date}], Time: [${time}]`);
+    if (time === 7) {
+        const line = new Line();
+        log.i(line.send('おはよー'));
+    }
 };
 
 global.test = require('./test');

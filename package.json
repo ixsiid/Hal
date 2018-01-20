@@ -46,7 +46,8 @@
     ]
   },
   "dependencies": {
-    "d3": "^4.12.2"
+    "d3": "^4.12.2",
+    "date-with-offset": "^1.0.1"
   },
   "directories": {
     "test": "test/"

@@ -1,3 +1,6 @@
+const Date = require('date-with-offset');
+const zone = require('../../secret/Locale').timezoneOffset;
+
 const Logger = require('../Logger');
 const Localize = require('./Localize');
 
@@ -8,7 +11,7 @@ module.exports = function (data) {
 
     const days = '日月火水木金土';
     this.raw = data;
-    this.date = new Date(data.dt * 1000);
+    this.date = new Date(data.dt * 1000, zone);
     this.dateLong = this.date.getFullYear() + '年' +
         (this.date.getMonth() + 1) + '月'
         + this.date.getDate() + '日 '
