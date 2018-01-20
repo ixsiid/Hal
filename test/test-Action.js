@@ -4,6 +4,7 @@ const glib = require('./GLibMock.js');
 // Can't test directory in dev/*.js
 // It should use in src/bundle.js
 
+/*
 const query = require('./QueryGenerator');
 
 describe('Action', function () {
@@ -13,3 +14,4 @@ describe('Action', function () {
         assert.equal(r.content, '"{}"');
     });
 });
+*/

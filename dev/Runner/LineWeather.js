@@ -13,29 +13,31 @@ module.exports = function (contents) {
     const log = new Logger('LINE WEATHER');
 
     base.match = () => {
-        this.messages = line.parse(contents);
-        log.v(this.messages);
-        return this.messages;
+        const messages = line.parse(contents);
+        if (!messages) return false;
+        this.offsetDays = messages.map(m => ({
+            days: GetOffsetDay(m.message),
+            token: m.token
+        })).filter(x => x.days.length > 0);
+
+        log.v(JSON.stringify(this.messages));
+        return this.offsetDays.length > 0;
     };
 
     base.run = () => {
-        this.messages.map(m => {
-            log.v(m);
-            const offsetDay = GetOffsetDay(m.message);
-            if (offsetDay.length > 0) {
-                const w = new Weather();
-                const message = offsetDay.map(d => {
-                    log.v(d + '日後の天気を返答');
-                    const target = new Date(zone);
-                    target.setDate(target.getDate() + d);
-                    return [target.toISOString().substring(0, 10) + 'の天気'].concat(
-                        w.getIncludeGroup('MTB', d).map(x => `${x.city}:${x.weather.short}`)
-                    ).join('\n');
-                }).join('\n\n');
+        this.offsetDays.map(offsetDay => {
+            const w = new Weather();
+            const message = offsetDay.days.map(d => {
+                log.v(d + '日後の天気を返答');
+                const target = new Date(zone);
+                target.setDate(target.getDate() + d);
+                return [target.toISOString().substring(0, 10) + 'の天気'].concat(
+                    w.getIncludeGroup('MTB', d).map(x => `${x.city}:${x.weather.short}`)
+                ).join('\n');
+            }).join('\n\n');
 
-                log.v(`返答内容: ${message}`);
-                line.send(message, m.token);
-            }
+            log.v(`返答内容: ${message}`);
+            line.send(message, offsetDay.token);
         });
         return { content: 'post ok' };
     };
