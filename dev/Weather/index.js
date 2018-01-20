@@ -18,6 +18,7 @@ module.exports = function () {
             throw new Error(`Range over offset days. req: (1-13), value: ${offsetDay}`);
 
         const url = q.get('daily', `lat=${geo.lat}&lon=${geo.lon}&cnt=${offsetDay + 1}`);
+        log.v(url);
         const contents = JSON.parse(UrlFetchApp.fetch(url, {
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',

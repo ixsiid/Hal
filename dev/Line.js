@@ -58,7 +58,7 @@ module.exports = function () {
         },
         method: 'post',
         payload: JSON.stringify(payload),
-      });
+      }).getContentText();
     };
   
     self.get = url => {

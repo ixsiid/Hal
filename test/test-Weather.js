@@ -1,28 +1,23 @@
 const assert = require('power-assert');
-const Weather = require('../dev/Weather');
-const Location = require('../dev/Location');
-const glib = require('../GLibMock.js');
+const glib = require('./GLibMock.js');
 
-describe('Fetch', function () {
-    this.timeout(5000);
-    const r = glib.test();
-    console.log(r.location);
-    console.log(r.weathre);
-    console.log(r.forecast);
-    it('Get www.google.com', function () {
-        assert.equal(glib.test(), undefined);
-    });
-});
+// Can't test directory in dev/*.js
+// It should use in src/bundle.js
 
 describe('Weather', function () {
-    const location = new Location({ longitude: 120, latitude: 90 });
-    it('should return to Location Object', () => {
-        assert.equal(location.toString(), 'Location Object');
-    });
-    it('should return to Weather Object', () => {
-        const weather = new Weather();
-        const forecast = weather.get(location, 2);
-        console.log(forecast);
-        assert.equal(forecast, 3);
+    this.timeout(5000);
+    const offsetDay = 2;
+    const latitude = 36.52;
+    const longitude = 139.71;
+    const targetDay = (() => {
+        const d = new Date();
+        d.setDate(d.getDate() + offsetDay);
+        return d;
+    })();
+    const r = glib.test.weather(latitude, longitude, offsetDay);
+
+    it('Get 2 after forecast', function () {
+        assert.deepEqual(r.location.openWeatherMap(), { lat: latitude, lon: longitude });
+        assert.equal(r.forecast.dateShort, `${targetDay.getMonth() + 1}/${targetDay.getDate()}`);
     });
 });
