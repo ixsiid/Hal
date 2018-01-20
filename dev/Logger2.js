@@ -15,7 +15,7 @@ module.exports = function (tag) {
         if (self.level < levels.indexOf(level)) return;
 
         const text = typeof object === 'string' ? object : JSON.stringify(object);
-        const datetime = JSON.stringify(new Date(zone)).substring(1, 20);
+        const datetime = new Date(zone).toISOString().substring(0, 19);
         body.appendParagraph('[' + datetime + '] (' + tag + ') ' + level.toUpperCase() + ': ' + text);
     };
 

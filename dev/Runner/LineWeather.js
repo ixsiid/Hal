@@ -22,14 +22,13 @@ module.exports = function (contents) {
         this.messages.map(m => {
             log.v(m);
             const offsetDay = GetOffsetDay(m.message);
-            log.v(JSON.stringify(offsetDay));
             if (offsetDay.length > 0) {
                 const w = new Weather();
                 const message = offsetDay.map(d => {
                     log.v(d + '日後の天気を返答');
                     const target = new Date(zone);
                     target.setDate(target.getDate() + d);
-                    return [JSON.stringify(target).substring(1, 11) + 'の天気'].concat(
+                    return [target.toISOString().substring(0, 10) + 'の天気'].concat(
                         w.getIncludeGroup('MTB', d).map(x => `${x.city}:${x.weather.short}`)
                     ).join('\n');
                 }).join('\n\n');

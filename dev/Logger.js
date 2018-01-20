@@ -27,7 +27,7 @@ module.exports = function (tag) {
             });
             return [typeof object === 'string' ? object : JSON.stringify(object)];
         })();
-        const datetime = JSON.stringify(new Date(zone)).substring(1, 20);
+        const datetime = new Date(zone).toISOString().substring(0, 19);
 
         const row = sheet.getLastRow() + 1;
         sheet.getRange(row, 1, 1, 2 + text.length).setValues([
