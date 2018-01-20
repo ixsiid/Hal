@@ -12,21 +12,16 @@ module.exports = function (contents) {
     const line = new Line();
     const log = new Logger('LINE WEATHER');
 
-    this.match = () => {
-        log.v(`aaa mathc ${contents}`);
-    };
-
-    log.v(`constructor ${contents}`);
     base.match = () => {
-        log.v(`match ${contents}`);
         const messages = line.parse(contents);
+        log.v(JSON.stringify(messages));
         if (!messages) return false;
+
         this.offsetDays = messages.map(m => ({
             days: GetOffsetDay(m.message),
             token: m.token
         })).filter(x => x.days.length > 0);
 
-        log.v(JSON.stringify(this.messages));
         return this.offsetDays.length > 0;
     };
 

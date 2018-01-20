@@ -16,7 +16,6 @@ describe('proceed Line message', function () {
         const r = glib.doPost(q);
         assert.deepEqual(JSON.parse(r.content), {content:'post ok'});
     });
-    */
     
     it('should send Line message もしかして: ', function () {
         const q = query('LINE', '達治');
@@ -29,4 +28,6 @@ describe('proceed Line message', function () {
         const r = glib.doPost(q);
         assert.deepEqual(JSON.parse(r.content), {content:'post ok'});
     });
+
+    */
 });
