@@ -11,7 +11,7 @@ module.exports = function () {
     
     const self = this;
     
-    self.info = userId => {
+    this.info = userId => {
       const url = 'https://api.line.me/v2/bot/profile/' + userId;
       const response = UrlFetchApp.fetch(url, {
         headers: { Authorization: 'Bearer ' + ACCESS_TOKEN }
@@ -22,13 +22,14 @@ module.exports = function () {
       return JSON.parse(responseContent);
     };
   
-    self.parse = contents => {
+    this.parse = contents => {
       log.v('Parse-Start;');
+      if (!(contents.events instanceof Array)) return undefined;
       return contents.events.map(function (lineEvent) {
         log.v('Parse: ' + JSON.stringify(lineEvent));
   
         const token = lineEvent.replyToken;
-        if (typeof token === 'undefined') return undefined;
+//        if (typeof token === 'undefined') return undefined;
   
         const message = lineEvent.message.text;
         const id = lineEvent.source.userId;
@@ -39,7 +40,7 @@ module.exports = function () {
       }).filter(function (x) { return x; });
     };
     
-    self.send = (message, reply) => {
+    this.send = (message, reply) => {
       log.v('Send: ' + message + ' -> ' + (reply ? reply : 'Owner'));
       const url = 'https://api.line.me/v2/bot/message/' + (reply ? 'reply' : 'push');
       
@@ -61,7 +62,7 @@ module.exports = function () {
       }).getContentText();
     };
   
-    self.get = url => {
+    this.get = url => {
       return UrlFetchApp.fetch(url, {
         headers: { Authorization: 'Bearer ' + ACCESS_TOKEN },
         method: 'get',

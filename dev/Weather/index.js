@@ -14,8 +14,8 @@ module.exports = function () {
     const q = new Query('https://api.openweathermap.org/data/2.5/forecast/', `APPID=${KEY}`);
 
     this.get = function (geo, offsetDay) {
-        if (offsetDay < 1 || offsetDay > 13)
-            throw new Error(`Range over offset days. req: (1-13), value: ${offsetDay}`);
+        if (offsetDay < 0 || offsetDay > 13)
+            throw new Error(`Range over offset days. req: (0-13), value: ${offsetDay}`);
 
         const url = q.get('daily', `lat=${geo.lat}&lon=${geo.lon}&cnt=${offsetDay + 1}`);
         log.v(url);
@@ -40,7 +40,7 @@ module.exports = function () {
             .filter(x => x.group.indexOf(group) >= 0)
             .map(x => ({
                 city: x.name,
-                weather: this.get(x.geo.openWeatherMap(), offsetDay)
+                weather: this.get(x.location.openWeatherMap(), offsetDay)
             }));
     };
 };

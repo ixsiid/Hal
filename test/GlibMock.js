@@ -6,10 +6,12 @@ gas.globalMockDefault.Logger.enabled = false;
 
 const defMock = gas.globalMockDefault;
 
+const SpreadsheetApp = require('./MockSpreadSheetApp');
+
 const customMock = {
     UrlFetchApp: {
         fetch: function (url, param) {
-            const method = param.method.toUpperCase();
+            const method = param.method ? param.method.toUpperCase() : 'GET';
             const option = {};
             if ('headers' in param) option.headers = param.headers;
             if ('payload' in param) option.body = param.payload;
@@ -49,30 +51,7 @@ const customMock = {
             };
         },
     },
-    SpreadsheetApp: {
-        openById: function (fileId) {
-            return {
-                getSheets: function () { return []; },
-                insertSheet: function (name) { },
-                getSheetByName: function (name) {
-                    return {
-                        getLastRow: function () { return 0; },
-                        getRange: function (row, col) {
-                            return {
-                                setValue: function (value) { },
-                                setBackground: function (color) { },
-                                setValues: function (array) {
-                                    array.map(row => {
-                                        console.log(row.join(', '));
-                                    });
-                                },
-                            };
-                        },
-                    };
-                },
-            };
-        },
-    },
+    SpreadsheetApp,
     __proto__: defMock,
 };
 
