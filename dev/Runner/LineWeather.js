@@ -12,7 +12,13 @@ module.exports = function (contents) {
     const line = new Line();
     const log = new Logger('LINE WEATHER');
 
+    this.match = () => {
+        log.v(`aaa mathc ${contents}`);
+    };
+
+    log.v(`constructor ${contents}`);
     base.match = () => {
+        log.v(`match ${contents}`);
         const messages = line.parse(contents);
         if (!messages) return false;
         this.offsetDays = messages.map(m => ({
@@ -31,7 +37,8 @@ module.exports = function (contents) {
                 log.v(d + '日後の天気を返答');
                 const target = new Date(zone);
                 target.setDate(target.getDate() + d);
-                return [target.toISOString().substring(0, 10) + 'の天気'].concat(
+                const date = `${target.getFullYear()}-${target.getMonth() + 1}-${target.getDate()}`;
+                return [`${date}の天気`].concat(
                     w.getIncludeGroup('MTB', d).map(x => `${x.city}:${x.weather.short}`)
                 ).join('\n');
             }).join('\n\n');

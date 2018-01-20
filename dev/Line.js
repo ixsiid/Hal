@@ -23,7 +23,7 @@ module.exports = function () {
     };
   
     this.parse = contents => {
-      log.v('Parse-Start;');
+      log.v(`Parse-Start; ${contents}`);
       if (!(contents.events instanceof Array)) return undefined;
       return contents.events.map(function (lineEvent) {
         log.v('Parse: ' + JSON.stringify(lineEvent));

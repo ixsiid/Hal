@@ -27,8 +27,8 @@ global.action.sheet = function (query) {
 
 global.doGet = function (query) {
     const log = global.log;
-    log.v('doGet');
-    log.v(JSON.stringify(query));
+    log.v(['doGet', query]);
+    
     const action = query.parameter.action;
     if (query.parameter.token !== global.token[action]) {
         log.e('Bad token access.');
@@ -47,11 +47,11 @@ const Runner = require('./Runner');
 
 global.doPost = function (request) {
     const log = global.log;
-    log.v('doPost');
-    log.v(request);
+    log.v(['doPost', request]);
 
     const contents = JSON.parse(request.postData.contents);
-    const runner = Runner.map(x => new x(contents)).find(x => x.match());
+    log.v(['post contents', contents]);
+    const runner = Runner.map(x => new x(contents)).filter(x => x.match())[0];
 
     log.v(runner ? runner.toString() : 'no runnner');
 

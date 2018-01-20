@@ -14,7 +14,7 @@ module.exports = function (contents) {
     base.match = () => {
         const messages = line.parse(contents);
         this.command = messages.map(m => {
-            const cmd = Command.find(x => x.test.test(m.message));
+            const cmd = Command.filter(x => x.test.test(m.message))[0];
             return !cmd ? undefined : {
                 text: cmd.proc(m.message),
                 token: m.token,

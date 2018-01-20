@@ -35,13 +35,13 @@ module.exports = function (text) {
         value: function (match) {
             return [match[1] ? 2 : 1];
         },
-    }].find(function (x) {
+    }].filter(function (x) {
         const match = x.reg.exec(text);
         if (!match) return false;
         log.i(match);
         result = x.value(match);
         return true;
-    });
+    })[0];
     log.i(JSON.stringify(result));
     return result;
 };

@@ -1,4 +1,4 @@
-module.exports = Object.assign([
+module.exports = [
     require('./LineWeather'),
     require('./Command'),
-]);
+];
